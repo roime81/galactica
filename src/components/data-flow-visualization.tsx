@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -10,11 +11,12 @@ import {
   Database,
   FileText,
   UploadCloud,
-  Cpu,
-  BookOpen,
-  Layers3,
-  Cable,
+  Users,
+  ShieldCheck,
+  Map,
   Share2,
+  Cable,
+  TrendingUp,
 } from "lucide-react";
 import { BronzeIcon, SilverIcon, GoldIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
@@ -62,7 +64,7 @@ export function DataFlowVisualization() {
         <div className="flex flex-col md:flex-row md:flex-wrap items-center md:items-stretch justify-center gap-4">
           <FlowStep
             icon={<Share2 className="w-8 h-8 text-primary" />}
-            title="Data Sources"
+            title="Data Source"
             description="Connecting to heterogeneous sources."
           >
             <div className="flex justify-center gap-4 text-muted-foreground">
@@ -80,38 +82,50 @@ export function DataFlowVisualization() {
           <Connector />
           <FlowStep
             icon={<UploadCloud className="w-8 h-8 text-primary" />}
-            title="Ingestion Layer"
+            title="Ingestion"
             description="Via Cloud Functions & Storage."
+          />
+          <Connector />
+           <FlowStep
+            icon={<Map className="w-8 h-8 text-primary" />}
+            title="Mapping"
+            description="Schema definition and transformation."
+          />
+          <Connector />
+           <FlowStep
+            icon={<ShieldCheck className="w-8 h-8 text-primary" />}
+            title="Testing"
+            description="Data validation and quality checks."
           />
           <Connector />
           <FlowStep
             icon={<BronzeIcon className="w-8 h-8 text-primary" />}
-            title="Bronze Layer"
-            description="Raw data in Cloud Storage."
+            title="Bronze"
+            description="Raw, validated data stored."
           />
           <Connector />
           <FlowStep
             icon={<SilverIcon className="w-8 h-8 text-primary" />}
-            title="Silver Layer"
-            description="Curated data in Firestore."
+            title="Silver"
+            description="Curated and enriched data."
           />
           <Connector />
           <FlowStep
             icon={<GoldIcon className="w-8 h-8 text-primary" />}
-            title="Gold Layer"
-            description="Aggregated data in Firestore."
+            title="Gold"
+            description="Aggregated for analytics."
           />
           <Connector />
           <FlowStep
-            icon={<Cpu className="w-8 h-8 text-accent" />}
-            title="Analytics & AI"
-            description="LLM-powered Q&A & summaries."
+            icon={<Users className="w-8 h-8 text-accent" />}
+            title="Data Consumerization"
+            description="BI, Analytics, and AI insights."
           />
           <Connector />
-          <FlowStep
-            icon={<BookOpen className="w-8 h-8 text-primary" />}
-            title="Data Catalog"
-            description="Sync with OpenMetadata/DataHub."
+           <FlowStep
+            icon={<TrendingUp className="w-8 h-8 text-primary" />}
+            title="End of Journey"
+            description="Actionable business outcomes."
           />
         </div>
       </CardContent>
