@@ -44,11 +44,11 @@ export function PipelineStepper() {
                   className="absolute inset-0 flex items-center"
                   aria-hidden="true"
                 >
-                  <div className="h-0.5 w-full bg-gray-700" />
+                  <div className="h-0.5 w-full bg-gray-200" />
                 </div>
-                <div className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-700 bg-background">
+                <div className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-300 bg-background">
                    <step.icon
-                    className="h-5 w-5 text-gray-500"
+                    className="h-5 w-5 text-gray-400"
                     aria-hidden="true"
                   />
                   <span className="absolute -bottom-6 text-xs font-medium text-muted-foreground whitespace-nowrap">

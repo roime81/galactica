@@ -94,7 +94,7 @@ export default function Home() {
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-center">
          <div className="flex justify-center items-center gap-4 mb-8">
             <GalacticaIcon className="w-16 h-16 text-primary" />
-            <h1 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+            <h1 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tight">
               Galactica
             </h1>
           </div>
