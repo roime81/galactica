@@ -3,7 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useAuth, useFirestore, setDocumentNonBlocking, useUser } from '@/firebase';
 import {
-  signInAnonymously,
+  GoogleAuthProvider,
+  signInWithPopup,
   type FirebaseError,
 } from 'firebase/auth';
 import { doc } from 'firebase/firestore';
@@ -32,15 +33,16 @@ export default function Home() {
     }
 
     try {
-      const result = await signInAnonymously(auth);
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
       const userRef = doc(firestore, 'users', user.uid);
       const userData = {
         id: user.uid,
-        email: `guest-${user.uid}@example.com`,
-        displayName: 'Anonymous User',
-        photoURL: '',
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
         lastSignInTime: new Date().toISOString(),
         creationTime: user.metadata.creationTime || new Date().toISOString(),
       };
@@ -48,12 +50,34 @@ export default function Home() {
       router.push('/');
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.error('Error signing in anonymously: ', firebaseError);
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: firebaseError.message || 'There was a problem with your login request.',
-      });
+      console.error('Error signing in with Google: ', firebaseError);
+
+      if (firebaseError.code === 'auth/operation-not-allowed') {
+        toast({
+          variant: 'destructive',
+          title: 'Login Method Disabled',
+          description: (
+            <div>
+              <p>Google Sign-In is not enabled for this project.</p>
+              <Button asChild variant="link" className="p-0 h-auto">
+                 <a
+                  href={`https://console.firebase.google.com/project/${auth.app.options.projectId}/authentication/providers`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Click here to enable it in the Firebase Console.
+                </a>
+              </Button>
+            </div>
+          ),
+        });
+      } else {
+         toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: firebaseError.message || 'There was a problem with your login request.',
+        });
+      }
     }
   };
 
