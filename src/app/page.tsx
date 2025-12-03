@@ -85,15 +85,12 @@ export default function Home() {
   if (!user) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-center">
-         <div className="flex justify-center items-center gap-4 mb-4">
+         <div className="flex justify-center items-center gap-4 mb-8">
             <GalacticaIcon className="w-16 h-16 text-primary" />
             <h1 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
               Galactica
             </h1>
           </div>
-        <p className="mb-8 text-lg text-muted-foreground">
-          Please log in to continue.
-        </p>
         <Button onClick={handleSignIn} size="lg">
           <Chrome className="mr-2" />
           Login using Google
