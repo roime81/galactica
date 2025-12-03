@@ -1,6 +1,6 @@
 import { BronzeLayer } from "@/components/bronze-layer";
 import { Auth } from "./auth";
-import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarFooter } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarFooter, SidebarInset } from "@/components/ui/sidebar";
 import { GalacticaIcon } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { PipelineStepper } from "@/components/pipeline-stepper";
