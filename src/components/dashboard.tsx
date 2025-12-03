@@ -8,6 +8,7 @@ import { GoldLayer } from '@/components/gold-layer';
 import { MappingLayer } from '@/components/mapping-layer';
 import { TestingLayer } from '@/components/testing-layer';
 import { DashboardLayer } from '@/components/dashboard-layer';
+import { MlAiLayer } from '@/components/ml-ai-layer';
 import { Auth } from './auth';
 import { GalacticaIcon } from '@/components/icons';
 import { PipelineStepper } from '@/components/pipeline-stepper';
@@ -32,6 +33,8 @@ export function Dashboard() {
         return <GoldLayer />;
       case 'Dashboard':
         return <DashboardLayer />;
+      case 'ML & AI':
+        return <MlAiLayer />;
       default:
         return <DataSourceLayer />;
     }
