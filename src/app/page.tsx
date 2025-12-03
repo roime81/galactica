@@ -2,14 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth, useFirestore, setDocumentNonBlocking, useUser } from '@/firebase';
-import { signInAnonymously, type FirebaseError } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  type FirebaseError,
+} from 'firebase/auth';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Dashboard } from '@/components/dashboard';
 import { Button } from '@/components/ui/button';
 import { Loader2, Chrome } from 'lucide-react';
-import Link from 'next/link';
 import { GalacticaIcon } from '@/components/icons';
+import Link from 'next/link';
 
 export default function Home() {
   const { user, isUserLoading } = useUser();
@@ -18,32 +22,62 @@ export default function Home() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleSignIn = async () => {
-    if (!auth) return;
-    try {
-      const result = await signInAnonymously(auth);
-      const user = result.user;
-      if (user && firestore) {
-        const userRef = doc(firestore, 'users', user.uid);
-        const userData = {
-          id: user.uid,
-          email: 'anonymous@example.com',
-          displayName: 'Anonymous User',
-          photoURL: '',
-          lastSignInTime: new Date().toISOString(),
-          creationTime: user.metadata.creationTime || new Date().toISOString(),
-        };
-        setDocumentNonBlocking(userRef, userData, { merge: true });
-        router.push('/');
-      }
-    } catch (error) {
-      const firebaseError = error as FirebaseError;
-      console.error('Error signing in anonymously: ', firebaseError.code, firebaseError.message);
+  const handleGoogleSignIn = async () => {
+    if (!auth || !firestore) {
       toast({
         variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your login request.',
+        title: 'Firebase not initialized',
+        description: 'The Firebase service is not available. Please try again later.',
       });
+      return;
+    }
+
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const userRef = doc(firestore, 'users', user.uid);
+      const userData = {
+        id: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        lastSignInTime: new Date().toISOString(),
+        creationTime: user.metadata.creationTime || new Date().toISOString(),
+      };
+      setDocumentNonBlocking(userRef, userData, { merge: true });
+      router.push('/');
+    } catch (error) {
+      const firebaseError = error as FirebaseError;
+      console.error('Error signing in with Google: ', firebaseError);
+
+      if (firebaseError.code === 'auth/operation-not-allowed') {
+        toast({
+          variant: 'destructive',
+          title: 'Login Method Disabled',
+          description: (
+            <div>
+              Google Sign-In is not enabled for this project. Please{' '}
+              <a
+                href="https://console.firebase.google.com/project/_/authentication/providers"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                enable it in the Firebase console
+              </a>
+              .
+            </div>
+          ),
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: firebaseError.message || 'There was a problem with your login request.',
+        });
+      }
     }
   };
 
@@ -64,7 +98,7 @@ export default function Home() {
               Galactica
             </h1>
           </div>
-        <Button onClick={handleSignIn} size="lg">
+        <Button onClick={handleGoogleSignIn} size="lg">
           <Chrome className="mr-2" />
           Login using Google
         </Button>
