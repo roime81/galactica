@@ -2,12 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth, useFirestore, setDocumentNonBlocking, useUser } from '@/firebase';
-import { GoogleAuthProvider, signInWithPopup, type FirebaseError } from 'firebase/auth';
+import { signInAnonymously, type FirebaseError } from 'firebase/auth';
 import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Dashboard } from '@/components/dashboard';
 import { Button } from '@/components/ui/button';
-import { Loader2, Chrome } from 'lucide-react';
+import { Loader2, User } from 'lucide-react';
 import Link from 'next/link';
 import { GalacticaIcon } from '@/components/icons';
 
@@ -20,17 +20,16 @@ export default function Home() {
 
   const handleSignIn = async () => {
     if (!auth) return;
-    const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInAnonymously(auth);
       const user = result.user;
       if (user && firestore) {
         const userRef = doc(firestore, 'users', user.uid);
         const userData = {
           id: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
+          email: 'anonymous@example.com',
+          displayName: 'Anonymous User',
+          photoURL: '',
           lastSignInTime: new Date().toISOString(),
           creationTime: user.metadata.creationTime || new Date().toISOString(),
         };
@@ -39,38 +38,12 @@ export default function Home() {
       }
     } catch (error) {
       const firebaseError = error as FirebaseError;
-      console.error('Error signing in with Google: ', firebaseError.code, firebaseError.message);
-
-      if (firebaseError.code === 'auth/operation-not-allowed') {
-        toast({
-          variant: 'destructive',
-          title: 'Login Method Disabled',
-          description: (
-            <div>
-              <p>
-                Google Sign-In is not enabled for this project. Please enable
-                it in your Firebase console.
-              </p>
-              <Button asChild variant="link" className="p-0 h-auto mt-2">
-                <Link
-                  href="https://console.firebase.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Go to Firebase Console
-                </Link>
-              </Button>
-            </div>
-          ),
-          duration: 9000,
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Uh oh! Something went wrong.',
-          description: 'There was a problem with your login request.',
-        });
-      }
+      console.error('Error signing in anonymously: ', firebaseError.code, firebaseError.message);
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'There was a problem with your login request.',
+      });
     }
   };
 
@@ -92,8 +65,8 @@ export default function Home() {
             </h1>
           </div>
         <Button onClick={handleSignIn} size="lg">
-          <Chrome className="mr-2" />
-          Login using Google
+          <User className="mr-2" />
+          Login Anonymously
         </Button>
       </div>
     );
