@@ -34,7 +34,7 @@ export function PipelineStepper({ currentStep }: PipelineStepperProps) {
     <nav aria-label="Progress">
       <ol
         role="list"
-        className="flex items-start justify-between rounded-md border border-border bg-card p-4"
+        className="flex flex-col space-y-4 rounded-md border border-border bg-card p-4"
       >
         {steps.map((step, stepIdx) => {
           const isCurrent = step.name === currentStep;
@@ -43,11 +43,11 @@ export function PipelineStepper({ currentStep }: PipelineStepperProps) {
             <li
               key={step.name}
               className={cn(
-                'relative flex-1'
+                'relative'
               )}
             >
               <button className={cn('w-full transition-opacity', !isCurrent && 'opacity-50 hover:opacity-75')}>
-                <div className="flex flex-col items-center text-center">
+                <div className="flex items-center text-center gap-4">
                   <div
                     className={cn(
                       'flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground relative',
@@ -64,7 +64,7 @@ export function PipelineStepper({ currentStep }: PipelineStepperProps) {
                   </div>
                   <p
                     className={cn(
-                      'mt-2 text-xs font-medium text-primary',
+                      'text-sm font-medium text-primary',
                       !isCurrent && 'text-muted-foreground'
                     )}
                   >
