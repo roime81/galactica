@@ -12,7 +12,8 @@ import { GalacticaIcon } from '@/components/icons';
 import { PipelineStepper } from '@/components/pipeline-stepper';
 
 export function Dashboard() {
-  const [currentStep, setCurrentStep] = useState('Data Source');
+  const [currentStep, setCurrentStep] = useState('Ingestion');
+  const [isBronzeExpanded, setIsBronzeExpanded] = useState(true);
 
   const renderContent = () => {
     switch (currentStep) {
@@ -32,6 +33,14 @@ export function Dashboard() {
         return <DataSourceLayer />;
     }
   };
+
+  const handleStepClick = (stepName: string) => {
+    setCurrentStep(stepName);
+    if (['Ingestion', 'Mapping', 'Testing'].includes(stepName) && !isBronzeExpanded) {
+        setIsBronzeExpanded(true);
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex justify-between items-center p-4 border-b border-border">
@@ -42,10 +51,12 @@ export function Dashboard() {
         <Auth />
       </header>
       <main className="flex flex-1">
-        <aside className="w-64 p-4 md:p-6 lg:p-8 border-r border-border">
+        <aside className="w-72 p-4 md:p-6 lg:p-8 border-r border-border">
           <PipelineStepper
             currentStep={currentStep}
-            onStepClick={setCurrentStep}
+            onStepClick={handleStepClick}
+            isBronzeExpanded={isBronzeExpanded}
+            onBronzeToggle={() => setIsBronzeExpanded(!isBronzeExpanded)}
           />
         </aside>
         <div className="flex-1 p-4 md:p-6 lg:p-8">{renderContent()}</div>
