@@ -38,7 +38,7 @@ export function Dashboard() {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
-           <Auth />
+           {/* Auth component moved to the header */}
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
@@ -51,6 +51,7 @@ export function Dashboard() {
               <span className="text-sm font-medium">BRONZE Layer</span>
             </div>
           </div>
+          <Auth />
         </header>
         <main className="flex-1 p-4 md:p-6 lg:p-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
