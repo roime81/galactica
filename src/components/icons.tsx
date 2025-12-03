@@ -3,6 +3,8 @@ import type { SVGProps } from "react";
 export const GalacticaIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -11,14 +13,20 @@ export const GalacticaIcon = (props: SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M12 2a10 10 0 1 0 10 10" />
-    <path d="M12 2a10 10 0 1 0 10 10" />
-    <path d="M12 2v20" />
-    <path d="M2 12h20" />
-    <path d="m18 6-4 4" />
-    <path d="m18 18-4-4" />
-    <path d="m6 18 4-4" />
-    <path d="m6 6 4 4" />
+    <path d="M14.5 12a5 5 0 0 1-5-5 5 5 0 0 1-5-5" />
+    <path d="M9.5 17a5 5 0 0 1 5 5 5 5 0 0 1 5 5" />
+    <path d="M6 15h2" />
+    <path d="M16 13h2" />
+    <path d="M6 9h2" />
+    <path d="M16 21h2" />
+    <path d="M12 19v-4" />
+    <path d="M12 9V5" />
+    <path d="M12 12c-2 0-2-2-2-4" />
+    <path d="M12 12c2 0 2 2 2 4" />
+    <path d="M10 21c-1.5 0-3-1-3-3" />
+    <path d="M14 3c1.5 0 3 1 3 3" />
+    <path d="M4 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
+    <path d="M20 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
   </svg>
 );
 
