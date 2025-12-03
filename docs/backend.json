@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user within the DataFlow AI Lake application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the user."
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "URL of the user's profile photo.",
+          "format": "uri"
+        },
+        "creationTime": {
+          "type": "string",
+          "description": "Timestamp of when the user account was created.",
+          "format": "date-time"
+        },
+        "lastSignInTime": {
+          "type": "string",
+          "description": "Timestamp of the user's last sign-in.",
+          "format": "date-time"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Indicates whether the user account is disabled."
+        },
+        "providerData": {
+          "type": "array",
+          "description": "Information about the user's identity providers (e.g., Google, email/password).",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "email"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user data, including email, display name, photo URL, and timestamps related to account creation and sign-in.  This path ensures path-based ownership.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "This Firestore structure is designed to support user authentication and data management for the DataFlow AI Lake application. The primary focus is on securely managing user data and providing a foundation for the application's features, including multi-source data ingestion, data validation, medallion architecture, LLM integration, and data catalog integration.\n\n**Authorization Independence:** User-specific data is stored under the `/users/{userId}` path, ensuring that access control can be enforced based on the user's ID without needing to read data from other documents.  There is no collaborative data or shared ownership in this schema, so no denormalization is required.  If collaborative features are added in the future (e.g., shared datasets), the membership map strategy (denormalizing the 'members' map into subcollections or documents that require authorization based on group membership). This schema currently supports the QAP because all data access is predicated on having the correct user ID.\n\n**Structural Segregation:** Each top-level collection (`users`) maintains a homogeneous security posture. All documents within `/users/{userId}` are owned by the user identified by `{userId}`. This simplifies security rules and prevents mixing data with different access requirements within the same collection.\n\n**Access Modeling:** This structure adheres to path-based ownership for user data. The `/users/{userId}` path establishes a clear ownership model, simplifying the creation of secure and efficient security rules. If additional user-owned data (e.g., datasets, projects) are added in the future, continue the hierarchical path structure (e.g., `/users/{userId}/datasets/{datasetId}`).\n\n**Data Clarity and Predictability:** The schema includes explicit data types and descriptions for each field, ensuring data clarity and predictability. Standardized naming conventions (e.g., `userId`) are used throughout the structure to improve maintainability and reduce ambiguity. There are no dynamic keys or complex state management in this initial structure, simplifying development and debugging."
+  }
+}
