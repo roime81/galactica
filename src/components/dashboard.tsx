@@ -9,11 +9,11 @@ export function Dashboard() {
         <div className="flex justify-center items-center gap-4 mb-4">
           <LakeIcon className="w-12 h-12 text-primary" />
           <h1 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-            DataFlow AI Lake
+            Galactica
           </h1>
         </div>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
-          A prototype Data Lake platform visualizing the Medallion Architecture
+          A prototype platform visualizing the Medallion Architecture
           on Firebase with integrated AI-powered analytics.
         </p>
       </header>

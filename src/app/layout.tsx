@@ -3,9 +3,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "DataFlow AI Lake",
+  title: "Galactica",
   description:
-    "A prototype Data Lake platform demonstrating the Medallion Architecture on Firebase.",
+    "A prototype platform demonstrating the Medallion Architecture on Firebase.",
 };
 
 export default function RootLayout({
