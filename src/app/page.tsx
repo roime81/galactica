@@ -13,7 +13,6 @@ import { Dashboard } from '@/components/dashboard';
 import { Button } from '@/components/ui/button';
 import { Loader2, Chrome } from 'lucide-react';
 import { GalacticaIcon } from '@/components/icons';
-import Link from 'next/link';
 
 export default function Home() {
   const { user, isUserLoading } = useUser();

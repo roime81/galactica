@@ -1,24 +1,64 @@
 import { BronzeLayer } from "@/components/bronze-layer";
 import { PipelineStepper } from "@/components/pipeline-stepper";
 import { Auth } from "./auth";
+import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
+import { GalacticaIcon, BronzeIcon, SilverIcon, GoldIcon } from "@/components/icons";
+import { Separator } from "@/components/ui/separator";
 
 export function Dashboard() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="flex justify-between items-center p-4 border-b border-border">
-        <h1 className="text-xl font-bold">Galactica</h1>
-        <Auth />
-      </header>
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <PipelineStepper />
-        <div className="mt-4">
-          <span className="text-sm text-muted-foreground">Pipeline &gt; </span>
-          <span className="text-sm font-medium">BRONZE Layer</span>
-        </div>
-        <div className="mt-6">
-          <BronzeLayer />
-        </div>
-      </main>
-    </div>
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          <div className="flex items-center gap-2">
+             <GalacticaIcon className="w-7 h-7 text-primary" />
+             <h1 className="text-xl font-semibold">Galactica</h1>
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive>
+                <BronzeIcon className="w-5 h-5" />
+                Bronze Layer
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <SilverIcon className="w-5 h-5" />
+                Silver Layer
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <GoldIcon className="w-5 h-5" />
+                Gold Layer
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarContent>
+        <SidebarFooter>
+           <Auth />
+        </SidebarFooter>
+      </Sidebar>
+      <SidebarInset>
+         <header className="flex justify-between items-center p-4 border-b border-border">
+          <div className="flex items-center gap-2">
+            <SidebarTrigger />
+            <Separator orientation="vertical" className="h-6" />
+            <div>
+              <span className="text-sm text-muted-foreground">Pipeline &gt; </span>
+              <span className="text-sm font-medium">BRONZE Layer</span>
+            </div>
+          </div>
+        </header>
+        <main className="flex-1 p-4 md:p-6 lg:p-8">
+          <PipelineStepper />
+          <div className="mt-8">
+            <BronzeLayer />
+          </div>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
