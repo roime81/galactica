@@ -53,9 +53,11 @@ export function Dashboard() {
           </div>
         </header>
         <main className="flex-1 p-4 md:p-6 lg:p-8">
-          <PipelineStepper />
-          <div className="mt-8">
-            <BronzeLayer />
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <PipelineStepper />
+            <div className="mt-8">
+              <BronzeLayer />
+            </div>
           </div>
         </main>
       </SidebarInset>
