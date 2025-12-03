@@ -36,21 +36,21 @@ export function BronzeLayer() {
         </CardHeader>
         <CardContent className="space-y-2">
           <Button
-            variant={activeSource === 'manual' ? 'default' : 'outline'}
+            variant={activeSource === 'manual' ? 'secondary' : 'ghost'}
             className="w-full justify-start text-left"
             onClick={() => setActiveSource('manual')}
           >
             <FileJson className="mr-2" /> Manual JSON
           </Button>
           <Button
-            variant={activeSource === 'iot' ? 'default' : 'outline'}
+            variant={activeSource === 'iot' ? 'secondary' : 'ghost'}
             className="w-full justify-start text-left"
             onClick={() => setActiveSource('iot')}
           >
             <Bot className="mr-2" /> IoT Stream (Simulated)
           </Button>
           <Button
-            variant={activeSource === 'upload' ? 'default' : 'outline'}
+            variant={activeSource === 'upload' ? 'secondary' : 'ghost'}
             className="w-full justify-start text-left"
             onClick={() => setActiveSource('upload')}
           >
@@ -68,12 +68,12 @@ export function BronzeLayer() {
               <Settings2 className="h-5 w-5 text-primary" />
               Ingestion Configuration
             </h3>
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="">
                 <Label htmlFor="batch-id">Batch Identifier</Label>
                 <Input id="batch-id" defaultValue="BATCH-2025" />
               </div>
-              <div className="flex items-center space-x-2 pt-6">
+              <div className="flex items-end pb-2 space-x-2">
                 <Checkbox id="validate-schema" defaultChecked />
                 <Label htmlFor="validate-schema">Validate Schema on Ingest</Label>
               </div>
@@ -82,7 +82,7 @@ export function BronzeLayer() {
           <div>
             <Textarea
               readOnly
-              className="h-64 font-mono text-xs bg-black/50"
+              className="h-64 font-mono text-xs bg-muted"
               value={sampleJson}
             />
           </div>
