@@ -13,20 +13,9 @@ export const GalacticaIcon = (props: SVGProps<SVGSVGElement>) => (
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M14.5 12a5 5 0 0 1-5-5 5 5 0 0 1-5-5" />
-    <path d="M9.5 17a5 5 0 0 1 5 5 5 5 0 0 1 5 5" />
-    <path d="M6 15h2" />
-    <path d="M16 13h2" />
-    <path d="M6 9h2" />
-    <path d="M16 21h2" />
-    <path d="M12 19v-4" />
-    <path d="M12 9V5" />
-    <path d="M12 12c-2 0-2-2-2-4" />
-    <path d="M12 12c2 0 2 2 2 4" />
-    <path d="M10 21c-1.5 0-3-1-3-3" />
-    <path d="M14 3c1.5 0 3 1 3 3" />
-    <path d="M4 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
-    <path d="M20 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
+    <path d="M18.5 4H5.5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z" />
+    <path d="M12 16v-4h4" />
+    <path d="M16 12a4 4 0 1 1-8 0" />
   </svg>
 );
 
