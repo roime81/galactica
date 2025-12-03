@@ -41,13 +41,6 @@ export function PipelineStepper() {
               <div
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground relative"
               >
-                 {stepIdx !== 0 && (
-                  <div
-                    className="absolute top-1/2 right-full -translate-y-1/2 hidden w-full bg-border sm:block mx-1"
-                    style={{ height: '2px', width: 'calc(100% - 0.5rem)' }}
-                    aria-hidden="true"
-                  />
-                )}
                 <step.icon className="h-6 w-6" aria-hidden="true" />
               </div>
               <p className="mt-2 text-xs font-medium text-primary">
