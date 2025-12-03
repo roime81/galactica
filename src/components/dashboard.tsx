@@ -1,7 +1,7 @@
 import { BronzeLayer } from "@/components/bronze-layer";
 import { Auth } from "./auth";
-import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
-import { GalacticaIcon, BronzeIcon, SilverIcon, GoldIcon } from "@/components/icons";
+import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarFooter } from "@/components/ui/sidebar";
+import { GalacticaIcon } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { PipelineStepper } from "@/components/pipeline-stepper";
 
@@ -17,24 +17,7 @@ export function Dashboard() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton isActive>
-                <BronzeIcon className="w-5 h-5" />
-                Bronze Layer
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <SilverIcon className="w-5 h-5" />
-                Silver Layer
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <GoldIcon className="w-5 h-5" />
-                Gold Layer
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {/* Layer menu items removed as requested */}
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
