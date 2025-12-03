@@ -19,13 +19,13 @@ export function PipelineStepper() {
     <nav aria-label="Progress">
       <ol
         role="list"
-        className="flex items-center justify-between border-y border-border py-4 overflow-x-auto"
+        className="flex items-center justify-between border-y border-border py-6 overflow-x-auto"
       >
         {steps.map((step, stepIdx) => (
           <li
             key={step.name}
             className={cn(
-              stepIdx !== steps.length - 1 ? "pr-8 sm:pr-12 md:pr-16" : "pr-2",
+              stepIdx !== steps.length - 1 ? "pr-10 sm:pr-14 md:pr-20" : "pr-2",
               "relative"
             )}
           >
@@ -35,11 +35,11 @@ export function PipelineStepper() {
                   className="absolute inset-0 flex items-center"
                   aria-hidden="true"
                 >
-                  <div className="h-0.5 w-full bg-primary" />
+                  <div className="h-1 w-full bg-primary" />
                 </div>
-                <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <step.icon className="h-5 w-5" aria-hidden="true" />
-                  <span className="absolute -bottom-6 text-xs font-semibold text-primary whitespace-nowrap">
+                <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <step.icon className="h-6 w-6" aria-hidden="true" />
+                  <span className="absolute -bottom-8 text-sm font-semibold text-primary whitespace-nowrap">
                     {step.name}
                   </span>
                 </div>
@@ -50,14 +50,14 @@ export function PipelineStepper() {
                   className="absolute inset-0 flex items-center"
                   aria-hidden="true"
                 >
-                  <div className="h-0.5 w-full bg-gray-200" />
+                  <div className="h-1 w-full bg-gray-200" />
                 </div>
-                <div className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-gray-300 bg-background">
+                <div className="relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-gray-300 bg-background">
                    <step.icon
-                    className="h-5 w-5 text-gray-400"
+                    className="h-6 w-6 text-gray-400"
                     aria-hidden="true"
                   />
-                  <span className="absolute -bottom-6 text-xs font-medium text-muted-foreground whitespace-nowrap">
+                  <span className="absolute -bottom-8 text-sm font-medium text-muted-foreground whitespace-nowrap">
                     {step.name}
                   </span>
                 </div>
