@@ -1,5 +1,4 @@
 import { BronzeLayer } from "@/components/bronze-layer";
-import { PipelineStepper } from "@/components/pipeline-stepper";
 import { Auth } from "./auth";
 import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { GalacticaIcon, BronzeIcon, SilverIcon, GoldIcon } from "@/components/icons";
@@ -47,14 +46,13 @@ export function Dashboard() {
             <SidebarTrigger />
             <Separator orientation="vertical" className="h-6" />
             <div>
-              <span className="text-sm text-muted-foreground">Pipeline &gt; </span>
+              <span className="text-sm text-muted-foreground">Pipeline > </span>
               <span className="text-sm font-medium">BRONZE Layer</span>
             </div>
           </div>
         </header>
         <main className="flex-1 p-4 md:p-6 lg:p-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <PipelineStepper />
             <div className="mt-8">
               <BronzeLayer />
             </div>
