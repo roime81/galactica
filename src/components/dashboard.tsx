@@ -5,6 +5,7 @@ import { DataSourceLayer } from '@/components/data-source-layer';
 import { BronzeLayer } from '@/components/bronze-layer';
 import { SilverLayer } from '@/components/silver-layer';
 import { GoldLayer } from '@/components/gold-layer';
+import { MappingLayer } from '@/components/mapping-layer';
 import { Auth } from './auth';
 import { GalacticaIcon } from '@/components/icons';
 import { PipelineStepper } from '@/components/pipeline-stepper';
@@ -18,6 +19,8 @@ export function Dashboard() {
         return <DataSourceLayer />;
       case 'Ingestion':
         return <BronzeLayer />;
+      case 'Mapping':
+        return <MappingLayer />;
       case 'Silver':
         return <SilverLayer />;
       case 'Gold':
