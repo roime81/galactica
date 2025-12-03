@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { DataSourceLayer } from '@/components/data-source-layer';
 import { BronzeLayer } from '@/components/bronze-layer';
 import { SilverLayer } from '@/components/silver-layer';
 import { GoldLayer } from '@/components/gold-layer';
@@ -9,10 +10,12 @@ import { GalacticaIcon } from '@/components/icons';
 import { PipelineStepper } from '@/components/pipeline-stepper';
 
 export function Dashboard() {
-  const [currentStep, setCurrentStep] = useState('Ingestion');
+  const [currentStep, setCurrentStep] = useState('Data Source');
 
   const renderContent = () => {
     switch (currentStep) {
+      case 'Data Source':
+        return <DataSourceLayer />;
       case 'Ingestion':
         return <BronzeLayer />;
       case 'Silver':
@@ -20,7 +23,7 @@ export function Dashboard() {
       case 'Gold':
         return <GoldLayer />;
       default:
-        return <BronzeLayer />;
+        return <DataSourceLayer />;
     }
   };
   return (
