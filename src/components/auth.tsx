@@ -3,16 +3,10 @@
 import {
   useAuth,
   useUser,
-  setDocumentNonBlocking,
-  useFirestore,
 } from '@/firebase';
 import {
-  GoogleAuthProvider,
-  signInWithPopup,
   signOut,
-  User,
 } from 'firebase/auth';
-import { doc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -23,7 +17,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LogIn, LogOut, Loader2 } from 'lucide-react';
+import { LogOut, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 // Helper function to get initials from a name
 const getInitials = (name?: string | null) => {
@@ -38,31 +33,6 @@ const getInitials = (name?: string | null) => {
 export function Auth() {
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
-  const firestore = useFirestore();
-
-  const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      // After sign-in, create or update the user's document in Firestore
-      if (user && firestore) {
-        const userRef = doc(firestore, 'users', user.uid);
-        const userData = {
-          id: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          lastSignInTime: new Date().toISOString(),
-          creationTime: user.metadata.creationTime || new Date().toISOString(),
-        };
-        // Use non-blocking setDoc with merge:true
-        setDocumentNonBlocking(userRef, userData, { merge: true });
-      }
-    } catch (error) {
-      console.error('Error signing in with Google: ', error);
-    }
-  };
 
   const handleSignOut = async () => {
     try {
@@ -78,10 +48,9 @@ export function Auth() {
 
   if (!user) {
     return (
-      <Button onClick={handleSignIn}>
-        <LogIn className="mr-2" />
-        Login
-      </Button>
+       <Button asChild>
+          <Link href="/login">Login</Link>
+        </Button>
     );
   }
 
