@@ -31,7 +31,7 @@ export default function Home() {
           Please log in to continue.
         </p>
         <Button asChild size="lg">
-          <Link href="/login">Go to Login</Link>
+          <Link href="/login">Login using Google</Link>
         </Button>
       </div>
     );
