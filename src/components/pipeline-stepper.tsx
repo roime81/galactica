@@ -39,7 +39,7 @@ export function PipelineStepper() {
           >
             <div className="flex flex-col items-center text-center">
               <div
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground relative"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground relative"
               >
                  {stepIdx !== 0 && (
                   <div
@@ -48,7 +48,7 @@ export function PipelineStepper() {
                     aria-hidden="true"
                   />
                 )}
-                <step.icon className="h-4 w-4" aria-hidden="true" />
+                <step.icon className="h-5 w-5" aria-hidden="true" />
               </div>
               <p className="mt-2 text-xs font-medium text-primary">
                 {step.name}
