@@ -25,28 +25,28 @@ const steps = [
 
 interface PipelineStepperProps {
   currentStep: string;
+  onStepClick: (stepName: string) => void;
 }
 
-export function PipelineStepper({ currentStep }: PipelineStepperProps) {
-  const currentStepIndex = steps.findIndex((step) => step.name === currentStep);
-
+export function PipelineStepper({
+  currentStep,
+  onStepClick,
+}: PipelineStepperProps) {
   return (
     <nav aria-label="Progress">
-      <ol
-        role="list"
-        className="flex flex-col space-y-4 rounded-md border border-border bg-card p-4"
-      >
-        {steps.map((step, stepIdx) => {
+      <ol role="list" className="flex flex-col space-y-4">
+        {steps.map((step) => {
           const isCurrent = step.name === currentStep;
 
           return (
-            <li
-              key={step.name}
-              className={cn(
-                'relative'
-              )}
-            >
-              <button className={cn('w-full transition-opacity', !isCurrent && 'opacity-50 hover:opacity-75')}>
+            <li key={step.name} className={cn('relative')}>
+              <button
+                onClick={() => onStepClick(step.name)}
+                className={cn(
+                  'w-full transition-opacity',
+                  !isCurrent && 'opacity-50 hover:opacity-75'
+                )}
+              >
                 <div className="flex items-center text-center gap-4">
                   <div
                     className={cn(

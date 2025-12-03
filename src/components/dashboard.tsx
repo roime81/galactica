@@ -1,9 +1,28 @@
-import { BronzeLayer } from "@/components/bronze-layer";
-import { Auth } from "./auth";
-import { GalacticaIcon } from "@/components/icons";
-import { PipelineStepper } from "@/components/pipeline-stepper";
+'use client';
+
+import { useState } from 'react';
+import { BronzeLayer } from '@/components/bronze-layer';
+import { SilverLayer } from '@/components/silver-layer';
+import { GoldLayer } from '@/components/gold-layer';
+import { Auth } from './auth';
+import { GalacticaIcon } from '@/components/icons';
+import { PipelineStepper } from '@/components/pipeline-stepper';
 
 export function Dashboard() {
+  const [currentStep, setCurrentStep] = useState('Ingestion');
+
+  const renderContent = () => {
+    switch (currentStep) {
+      case 'Ingestion':
+        return <BronzeLayer />;
+      case 'Silver':
+        return <SilverLayer />;
+      case 'Gold':
+        return <GoldLayer />;
+      default:
+        return <BronzeLayer />;
+    }
+  };
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex justify-between items-center p-4 border-b border-border">
@@ -15,11 +34,12 @@ export function Dashboard() {
       </header>
       <main className="flex flex-1">
         <aside className="w-64 p-4 md:p-6 lg:p-8 border-r border-border">
-           <PipelineStepper currentStep="Bronze" />
+          <PipelineStepper
+            currentStep={currentStep}
+            onStepClick={setCurrentStep}
+          />
         </aside>
-        <div className="flex-1 p-4 md:p-6 lg:p-8">
-          <BronzeLayer />
-        </div>
+        <div className="flex-1 p-4 md:p-6 lg:p-8">{renderContent()}</div>
       </main>
     </div>
   );
