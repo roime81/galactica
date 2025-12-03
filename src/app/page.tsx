@@ -7,7 +7,7 @@ import { doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Dashboard } from '@/components/dashboard';
 import { Button } from '@/components/ui/button';
-import { Loader2, User } from 'lucide-react';
+import { Loader2, Chrome } from 'lucide-react';
 import Link from 'next/link';
 import { GalacticaIcon } from '@/components/icons';
 
@@ -65,8 +65,8 @@ export default function Home() {
             </h1>
           </div>
         <Button onClick={handleSignIn} size="lg">
-          <User className="mr-2" />
-          Login Anonymously
+          <Chrome className="mr-2" />
+          Login using Google
         </Button>
       </div>
     );
