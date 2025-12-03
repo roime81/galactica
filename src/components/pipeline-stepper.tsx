@@ -35,21 +35,20 @@ export function PipelineStepper() {
             key={step.name}
             className={cn(
               'relative flex-1',
-              stepIdx !== steps.length - 1 ? 'pr-4' : ''
             )}
           >
             <div className="flex flex-col items-center text-center">
               <div
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground relative"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground relative"
               >
-                <step.icon className="h-5 w-5" aria-hidden="true" />
-                {stepIdx !== steps.length - 1 && (
+                 {stepIdx !== 0 && (
                   <div
-                    className="absolute top-1/2 left-full ml-2 hidden w-full -translate-y-1/2 bg-border sm:block"
+                    className="absolute top-1/2 right-full -translate-y-1/2 hidden w-full bg-border sm:block"
                     style={{ height: '2px' }}
                     aria-hidden="true"
                   />
                 )}
+                <step.icon className="h-4 w-4" aria-hidden="true" />
               </div>
               <p className="mt-2 text-xs font-medium text-primary">
                 {step.name}
