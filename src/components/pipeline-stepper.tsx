@@ -6,8 +6,8 @@ import {
   Package,
   Medal,
   Gem,
-  Users,
-  Flag,
+  LayoutDashboard,
+  BrainCircuit,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -19,8 +19,8 @@ const steps = [
   { name: 'Bronze', icon: Package },
   { name: 'Silver', icon: Medal },
   { name: 'Gold', icon: Gem },
-  { name: 'Data Consumerization', icon: Users },
-  { name: 'End of Journey', icon: Flag },
+  { name: 'Dashboard', icon: LayoutDashboard },
+  { name: 'ML & AI', icon: BrainCircuit },
 ];
 
 interface PipelineStepperProps {
