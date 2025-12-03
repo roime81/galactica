@@ -2,16 +2,19 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth, useFirestore, setDocumentNonBlocking } from '@/firebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, type FirebaseError } from 'firebase/auth';
 import { doc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Chrome } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
 
 export function LoginForm() {
   const auth = useAuth();
   const firestore = useFirestore();
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleSignIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -32,8 +35,39 @@ export function LoginForm() {
         router.push('/');
       }
     } catch (error) {
-      console.error('Error signing in with Google: ', error);
-      // Optionally, show an error to the user
+      const firebaseError = error as FirebaseError;
+      console.error('Error signing in with Google: ', firebaseError.code, firebaseError.message);
+
+      if (firebaseError.code === 'auth/operation-not-allowed') {
+        toast({
+          variant: 'destructive',
+          title: 'Login Method Disabled',
+          description: (
+            <div>
+              <p>
+                Google Sign-In is not enabled for this project. Please enable
+                it in your Firebase console.
+              </p>
+              <Button asChild variant="link" className="p-0 h-auto mt-2">
+                <Link
+                  href="https://console.firebase.google.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Go to Firebase Console
+                </Link>
+              </Button>
+            </div>
+          ),
+          duration: 9000,
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Uh oh! Something went wrong.',
+          description: 'There was a problem with your login request.',
+        });
+      }
     }
   };
 
