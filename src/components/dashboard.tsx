@@ -13,12 +13,12 @@ export function Dashboard() {
         </div>
         <Auth />
       </header>
-      <main className="flex-1 p-4 md:p-6 lg:p-8">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <PipelineStepper currentStep="Bronze" />
-          <div className="mt-8">
-            <BronzeLayer />
-          </div>
+      <main className="flex flex-1">
+        <aside className="w-64 p-4 md:p-6 lg:p-8 border-r border-border">
+           <PipelineStepper currentStep="Bronze" />
+        </aside>
+        <div className="flex-1 p-4 md:p-6 lg:p-8">
+          <BronzeLayer />
         </div>
       </main>
     </div>
