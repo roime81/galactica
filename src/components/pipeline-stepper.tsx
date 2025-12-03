@@ -1,11 +1,17 @@
 import { cn } from "@/lib/utils";
-import { Circle, Cpu, Database, Microscope } from "lucide-react";
+import { Circle, Database, Upload, GitMerge, TestTube2, Flag, User, ShoppingCart, Award } from "lucide-react";
+import { BronzeIcon, SilverIcon, GoldIcon } from "@/components/icons";
 
 const steps = [
-  { name: "RAW INGESTION", icon: Database, status: "current" },
-  { name: "HARMONIZATION", icon: Microscope, status: "upcoming" },
-  { name: "CURATED SCHEMA", icon: Circle, status: "upcoming" },
-  { name: "APPLIED AI", icon: Cpu, status: "upcoming" },
+  { name: "DATA SOURCE", icon: Database, status: "current" },
+  { name: "INGESTION", icon: Upload, status: "upcoming" },
+  { name: "MAPPING", icon: GitMerge, status: "upcoming" },
+  { name: "TESTING", icon: TestTube2, status: "upcoming" },
+  { name: "BRONZE", icon: BronzeIcon, status: "upcoming" },
+  { name: "SILVER", icon: SilverIcon, status: "upcoming" },
+  { name: "GOLD", icon: GoldIcon, status: "upcoming" },
+  { name: "DATA CONSUMERIZATION", icon: ShoppingCart, status: "upcoming" },
+  { name: "END OF JOURNEY", icon: Flag, status: "upcoming" },
 ];
 
 export function PipelineStepper() {
@@ -13,13 +19,13 @@ export function PipelineStepper() {
     <nav aria-label="Progress">
       <ol
         role="list"
-        className="flex items-center justify-between border-y border-border py-4"
+        className="flex items-center justify-between border-y border-border py-4 overflow-x-auto"
       >
         {steps.map((step, stepIdx) => (
           <li
             key={step.name}
             className={cn(
-              stepIdx !== steps.length - 1 ? "pr-8 sm:pr-20" : "",
+              stepIdx !== steps.length - 1 ? "pr-8 sm:pr-12 md:pr-16" : "pr-2",
               "relative"
             )}
           >
