@@ -6,6 +6,7 @@ import { BronzeLayer } from '@/components/bronze-layer';
 import { SilverLayer } from '@/components/silver-layer';
 import { GoldLayer } from '@/components/gold-layer';
 import { MappingLayer } from '@/components/mapping-layer';
+import { TestingLayer } from '@/components/testing-layer';
 import { Auth } from './auth';
 import { GalacticaIcon } from '@/components/icons';
 import { PipelineStepper } from '@/components/pipeline-stepper';
@@ -21,6 +22,8 @@ export function Dashboard() {
         return <BronzeLayer />;
       case 'Mapping':
         return <MappingLayer />;
+      case 'Testing':
+        return <TestingLayer />;
       case 'Silver':
         return <SilverLayer />;
       case 'Gold':
