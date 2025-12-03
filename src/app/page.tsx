@@ -5,7 +5,7 @@ import { useUser } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { LakeIcon } from '@/components/icons';
+import { GalacticaIcon } from '@/components/icons';
 
 export default function Home() {
   const { user, isUserLoading } = useUser();
@@ -22,7 +22,7 @@ export default function Home() {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 text-center">
          <div className="flex justify-center items-center gap-4 mb-4">
-            <LakeIcon className="w-16 h-16 text-primary" />
+            <GalacticaIcon className="w-16 h-16 text-primary" />
             <h1 className="font-headline text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
               Galactica
             </h1>

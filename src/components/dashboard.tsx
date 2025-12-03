@@ -1,6 +1,6 @@
 import { DataFlowVisualization } from "@/components/data-flow-visualization";
 import { LlmInteraction } from "@/components/llm-interaction";
-import { LakeIcon } from "./icons";
+import { GalacticaIcon } from "./icons";
 import { Auth } from "./auth";
 
 export function Dashboard() {
@@ -9,7 +9,7 @@ export function Dashboard() {
       <header className="flex justify-between items-start mb-12 md:mb-16">
         <div className="flex-1 text-center">
           <div className="flex justify-center items-center gap-4 mb-4">
-            <LakeIcon className="w-12 h-12 text-primary" />
+            <GalacticaIcon className="w-12 h-12 text-primary" />
             <h1 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
               Galactica
             </h1>
