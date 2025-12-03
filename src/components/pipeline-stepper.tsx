@@ -30,55 +30,30 @@ export function PipelineStepper() {
     <nav aria-label="Progress">
       <ol
         role="list"
-        className="flex items-center justify-between rounded-md border border-border bg-card p-4"
+        className="flex items-start justify-between rounded-md border border-border bg-card p-4"
       >
         {steps.map((step, stepIdx) => (
           <li
             key={step.name}
             className={cn(
-              'relative',
-              stepIdx !== steps.length - 1 ? 'pr-8 sm:pr-20' : ''
+              'relative flex-1',
+              stepIdx !== steps.length - 1 ? 'pr-8 sm:pr-4' : ''
             )}
           >
-            <div className="flex items-center">
-              <span
-                className={cn(
-                  'flex h-12 w-12 items-center justify-center rounded-full',
-                  stepStatus === 'completed'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground'
-                )}
-              >
-                <step.icon className="h-7 w-7" />
-              </span>
-            </div>
-            <div
-              className={cn(
-                'absolute inset-0 top-1/2 -z-10 hidden w-full bg-border sm:block',
-                stepIdx === 0 ? 'rounded-l-lg' : '',
-                stepIdx === steps.length - 1 ? 'rounded-r-lg' : ''
-              )}
-              aria-hidden="true"
-            >
+            <div className="flex flex-col items-center text-center">
               <div
-                className="h-0.5 w-full bg-transparent"
-                style={{
-                  width:
-                    stepIdx < steps.length - 1
-                      ? `calc(((100% - 1rem) / ${
-                          steps.length - 1
-                        }) * ${stepIdx} + 0.5rem)`
-                      : '100%',
-                }}
-              />
-            </div>
-            <div className="mt-2 text-center">
-              <p
-                className={cn(
-                  'text-base font-medium',
-                  stepStatus === 'completed' ? 'text-primary' : 'text-muted-foreground'
-                )}
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground relative"
               >
+                <step.icon className="h-6 w-6" aria-hidden="true" />
+                {stepIdx !== steps.length - 1 && (
+                  <div
+                    className="absolute top-1/2 left-full ml-4 hidden w-full -translate-y-1/2 bg-border sm:block"
+                    style={{ height: '2px' }}
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+              <p className="mt-2 text-sm font-medium text-primary">
                 {step.name}
               </p>
             </div>
