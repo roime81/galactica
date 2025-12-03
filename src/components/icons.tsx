@@ -1,5 +1,26 @@
 import type { SVGProps } from "react";
 
+export const LakeIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="m2 12.5 2-1.5 4 1.5 4-1.5 4 1.5 4-1.5 2 1.5" />
+    <path d="m2 15.5 2-1.5 4 1.5 4-1.5 4 1.5 4-1.5 2 1.5" />
+    <path d="m2 18.5 2-1.5 4 1.5 4-1.5 4 1.5 4-1.5 2 1.5" />
+    <path d="M22 12s-4.2 4-10 4-10-4-10-4" />
+    <path d="M2 12v3" />
+    <path d="M22 12v3" />
+  </svg>
+);
+
+
 export const BronzeIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
