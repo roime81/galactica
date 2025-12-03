@@ -7,6 +7,7 @@ import { SilverLayer } from '@/components/silver-layer';
 import { GoldLayer } from '@/components/gold-layer';
 import { MappingLayer } from '@/components/mapping-layer';
 import { TestingLayer } from '@/components/testing-layer';
+import { DashboardLayer } from '@/components/dashboard-layer';
 import { Auth } from './auth';
 import { GalacticaIcon } from '@/components/icons';
 import { PipelineStepper } from '@/components/pipeline-stepper';
@@ -29,6 +30,8 @@ export function Dashboard() {
         return <SilverLayer />;
       case 'Gold':
         return <GoldLayer />;
+      case 'Dashboard':
+        return <DashboardLayer />;
       default:
         return <DataSourceLayer />;
     }
