@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Server, Plug, Cloud, Link, X, ExternalLink, Key } from 'lucide-react';
+import { Server, Plug, Cloud, Link, X, ExternalLink, Key, Upload, Share2, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Sheet,
@@ -74,6 +74,30 @@ const dataSources: DataSource[] = [
     statusVariant: 'default',
     action: 'Manage',
   },
+  {
+    name: 'Manual Upload',
+    icon: <Upload className="h-8 w-8 text-gray-500" />,
+    description: 'Upload data files directly from your computer.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
+  },
+  {
+    name: 'Apache Kafka',
+    icon: <Share2 className="h-8 w-8 text-black dark:text-white" />,
+    description: 'Connect to a real-time data streaming platform.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
+  },
+    {
+    name: 'Apache Spark',
+    icon: <Sparkles className="h-8 w-8 text-orange-500" />,
+    description: 'Connect to a large-scale data processing engine.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
+  },
 ];
 
 export function DataSourceLayer() {
@@ -82,6 +106,7 @@ export function DataSourceLayer() {
   const projectId = auth?.app?.options?.projectId;
 
   const handleManageClick = (source: DataSource) => {
+    if (source.action === 'Connect') return;
     setSelectedSource(source);
   }
 
@@ -192,7 +217,7 @@ export function DataSourceLayer() {
         </p>
       </div>
       <Sheet onOpenChange={(isOpen) => !isOpen && setSelectedSource(null)}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {dataSources.map((source) => (
             <Card key={source.name} className="flex flex-col">
               <CardHeader className="flex flex-row items-start justify-between">
@@ -206,7 +231,8 @@ export function DataSourceLayer() {
                   }
                   className={cn(
                     source.status === 'Connected' &&
-                      'text-green-600 border-green-600'
+                      'text-green-600 border-green-600',
+                    source.status === 'Not Connected' && 'text-red-600 border-red-600'
                   )}
                 >
                   {source.status}
@@ -220,6 +246,7 @@ export function DataSourceLayer() {
                     <Button
                       className="w-full"
                       onClick={() => handleManageClick(source)}
+                      disabled={source.action === 'Connect'}
                     >
                       <Plug className="mr-2 h-4 w-4" />
                       {source.action}
