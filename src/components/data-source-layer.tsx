@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Server, Plug, Cloud, Link, X, ExternalLink, Key, Upload, Share2, Sparkles } from 'lucide-react';
+import { Server, Plug, Cloud, Link, X, ExternalLink, Key, Upload, Share2, Sparkles, FileUp, Settings, HardDrive } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Sheet,
@@ -78,25 +78,25 @@ const dataSources: DataSource[] = [
     name: 'Manual Upload',
     icon: <Upload className="h-8 w-8 text-gray-500" />,
     description: 'Upload data files directly from your computer.',
-    status: 'Not Connected',
-    statusVariant: 'destructive',
-    action: 'Connect',
+    status: 'Connected',
+    statusVariant: 'default',
+    action: 'Manage',
   },
   {
     name: 'Apache Kafka',
     icon: <Share2 className="h-8 w-8 text-black dark:text-white" />,
     description: 'Connect to a real-time data streaming platform.',
-    status: 'Not Connected',
-    statusVariant: 'destructive',
-    action: 'Connect',
+    status: 'Connected',
+    statusVariant: 'default',
+    action: 'Manage',
   },
     {
     name: 'Apache Spark',
     icon: <Sparkles className="h-8 w-8 text-orange-500" />,
     description: 'Connect to a large-scale data processing engine.',
-    status: 'Not Connected',
-    statusVariant: 'destructive',
-    action: 'Connect',
+    status: 'Connected',
+    statusVariant: 'default',
+    action: 'Manage',
   },
 ];
 
@@ -106,12 +106,133 @@ export function DataSourceLayer() {
   const projectId = auth?.app?.options?.projectId;
 
   const handleManageClick = (source: DataSource) => {
-    if (source.action === 'Connect') return;
     setSelectedSource(source);
   }
 
   const renderSheetContent = () => {
     if (!selectedSource) return null;
+
+    if (selectedSource.name === 'Manual Upload') {
+       return (
+         <>
+            <SheetHeader>
+                <div className='flex items-center gap-4 mb-2'>
+                     {selectedSource.icon}
+                    <SheetTitle className="text-xl">Manage {selectedSource.name}</SheetTitle>
+                </div>
+                <SheetDescription>
+                  Upload CSV, JSON, or Parquet files directly.
+                </SheetDescription>
+            </SheetHeader>
+            <div className="py-8 space-y-6">
+                <Card className="border-dashed border-2 hover:border-primary transition-colors">
+                    <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+                        <FileUp className="h-12 w-12 text-muted-foreground mb-4" />
+                        <p className="font-semibold mb-1">Drag & drop files here</p>
+                        <p className="text-muted-foreground text-sm">or</p>
+                        <Button variant="outline" className="mt-2">Browse files</Button>
+                    </CardContent>
+                </Card>
+            </div>
+            <SheetFooter>
+                <SheetClose asChild>
+                    <Button variant="secondary">
+                      Cancel
+                    </Button>
+                </SheetClose>
+            </SheetFooter>
+        </>
+       )
+    }
+    
+    if (selectedSource.name === 'Apache Kafka') {
+        return (
+             <>
+                <SheetHeader>
+                    <div className='flex items-center gap-4 mb-2'>
+                         {selectedSource.icon}
+                        <SheetTitle className="text-xl">Manage {selectedSource.name}</SheetTitle>
+                    </div>
+                    <SheetDescription>
+                      Configure your Kafka cluster connection.
+                    </SheetDescription>
+                </SheetHeader>
+                <div className="py-8 space-y-6">
+                     <div className='p-4 rounded-lg border bg-muted/50 space-y-4'>
+                        <h3 className='font-semibold text-lg'>Connection Details</h3>
+                         <Separator />
+                        <div className='space-y-2'>
+                            <Label htmlFor='kafka-brokers'>Bootstrap Brokers</Label>
+                            <Input id="kafka-brokers" readOnly value="kafka-broker-1:9092,kafka-broker-2:9092" />
+                        </div>
+                        <div className='space-y-2'>
+                            <Label htmlFor='kafka-topic'>Topic</Label>
+                            <Input id="kafka-topic" readOnly value="iot-data-stream" />
+                        </div>
+                         <div className='text-sm flex justify-between'>
+                            <span className='text-muted-foreground'>Status:</span>
+                            <span className='font-semibold text-green-600'>Connected</span>
+                        </div>
+                    </div>
+                </div>
+                <SheetFooter>
+                    <SheetClose asChild>
+                        <Button variant="destructive">
+                        <X className='mr-2' />
+                        Disconnect
+                        </Button>
+                    </SheetClose>
+                </SheetFooter>
+            </>
+        )
+    }
+
+    if (selectedSource.name === 'Apache Spark') {
+        return (
+             <>
+                <SheetHeader>
+                    <div className='flex items-center gap-4 mb-2'>
+                         {selectedSource.icon}
+                        <SheetTitle className="text-xl">Manage {selectedSource.name}</SheetTitle>
+                    </div>
+                    <SheetDescription>
+                      Configure your Spark cluster connection.
+                    </SheetDescription>
+                </SheetHeader>
+                <div className="py-8 space-y-6">
+                     <div className='p-4 rounded-lg border bg-muted/50 space-y-4'>
+                        <h3 className='font-semibold text-lg'>Connection Details</h3>
+                         <Separator />
+                        <div className='space-y-2'>
+                            <Label htmlFor='spark-master'>Master URL</Label>
+                            <Input id="spark-master" readOnly value="spark://spark-master:7077" />
+                        </div>
+                        <div className='space-y-2'>
+                            <Label htmlFor='spark-cluster'>Cluster Name</Label>
+                            <Input id="spark-cluster" readOnly value="data-processing-cluster" />
+                        </div>
+                         <div className='text-sm flex justify-between'>
+                            <span className='text-muted-foreground'>Status:</span>
+                            <span className='font-semibold text-green-600'>Connected</span>
+                        </div>
+                    </div>
+                     <Button variant="outline" className="w-full">
+                        <Settings />
+                        Manage Cluster Settings
+                    </Button>
+                </div>
+                <SheetFooter>
+                    <SheetClose asChild>
+                        <Button variant="destructive">
+                        <X className='mr-2' />
+                        Disconnect
+                        </Button>
+                    </SheetClose>
+                </SheetFooter>
+            </>
+        )
+    }
+
 
     if (selectedSource.name === 'Generic REST API') {
         return (
@@ -246,7 +367,6 @@ export function DataSourceLayer() {
                     <Button
                       className="w-full"
                       onClick={() => handleManageClick(source)}
-                      disabled={source.action === 'Connect'}
                     >
                       <Plug className="mr-2 h-4 w-4" />
                       {source.action}
