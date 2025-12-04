@@ -51,7 +51,7 @@ type DataSource = {
   consoleUrl?: (projectId?: string) => string;
 };
 
-const dataSources: DataSource[] = [
+const initialDataSources: DataSource[] = [
   {
     name: 'Firebase Firestore',
     icon: <Cloud className="h-8 w-8 text-orange-400" />,
@@ -153,7 +153,7 @@ const dataSources: DataSource[] = [
   },
 ];
 
-const ConnectionForm = ({ sourceName }: { sourceName: string }) => {
+const ConnectionForm = ({ sourceName, onConnect }: { sourceName: string, onConnect: () => void }) => {
   let fields: {id: string, label: string, type: string, placeholder: string}[] = [];
 
   switch (sourceName) {
@@ -202,27 +202,60 @@ const ConnectionForm = ({ sourceName }: { sourceName: string }) => {
   }
 
   return (
-    <div className='space-y-4'>
-      {fields.map(field => (
-        <div key={field.id} className='space-y-2'>
-          <Label htmlFor={field.id}>{field.label}</Label>
-          <Input id={field.id} type={field.type} placeholder={field.placeholder} />
-        </div>
-      ))}
-    </div>
+    <form onSubmit={(e) => { e.preventDefault(); onConnect(); }}>
+      <div className='space-y-4'>
+        {fields.map(field => (
+          <div key={field.id} className='space-y-2'>
+            <Label htmlFor={field.id}>{field.label}</Label>
+            <Input id={field.id} type={field.type} placeholder={field.placeholder} />
+          </div>
+        ))}
+      </div>
+      <SheetFooter className="mt-8">
+          <SheetClose asChild>
+              <Button variant="secondary">
+                Cancel
+              </Button>
+          </SheetClose>
+            <Button type="submit">
+                <Plug className="mr-2 h-4 w-4" />
+                Connect
+              </Button>
+      </SheetFooter>
+    </form>
   );
 };
 
 
 export function DataSourceLayer() {
+  const [dataSources, setDataSources] = useState<DataSource[]>(initialDataSources);
   const [selectedSource, setSelectedSource] = useState<DataSource | null>(null);
   const [isClusterSettingsOpen, setIsClusterSettingsOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const auth = useAuth();
   const projectId = auth?.app?.options?.projectId;
 
   const handleManageClick = (source: DataSource) => {
     setSelectedSource(source);
+    setIsSheetOpen(true);
   }
+
+  const handleStatusChange = (sourceName: string, status: 'Connected' | 'Not Connected') => {
+    setDataSources(prevSources =>
+      prevSources.map(s =>
+        s.name === sourceName
+          ? {
+              ...s,
+              status,
+              action: status === 'Connected' ? 'Manage' : 'Connect',
+              statusVariant: status === 'Connected' ? 'default' : 'destructive',
+            }
+          : s
+      )
+    );
+    setIsSheetOpen(false);
+  };
+
 
   const renderSheetContent = () => {
     if (!selectedSource) return null;
@@ -250,11 +283,10 @@ export function DataSourceLayer() {
                 </Card>
             </div>
             <SheetFooter>
-                <SheetClose asChild>
-                    <Button variant="secondary">
-                      Cancel
-                    </Button>
-                </SheetClose>
+                <Button variant="destructive" onClick={() => handleStatusChange(selectedSource.name, 'Not Connected')}>
+                  <X className='mr-2' />
+                  Disconnect
+                </Button>
             </SheetFooter>
         </>
        )
@@ -291,12 +323,10 @@ export function DataSourceLayer() {
                     </div>
                 </div>
                 <SheetFooter>
-                    <SheetClose asChild>
-                        <Button variant="destructive">
-                        <X className='mr-2' />
-                        Disconnect
-                        </Button>
-                    </SheetClose>
+                    <Button variant="destructive" onClick={() => handleStatusChange(selectedSource.name, 'Not Connected')}>
+                    <X className='mr-2' />
+                    Disconnect
+                    </Button>
                 </SheetFooter>
             </>
         )
@@ -383,12 +413,10 @@ export function DataSourceLayer() {
                     </Dialog>
                 </div>
                 <SheetFooter>
-                    <SheetClose asChild>
-                        <Button variant="destructive">
-                        <X className='mr-2' />
-                        Disconnect
-                        </Button>
-                    </SheetClose>
+                    <Button variant="destructive" onClick={() => handleStatusChange(selectedSource.name, 'Not Connected')}>
+                    <X className='mr-2' />
+                    Disconnect
+                    </Button>
                 </SheetFooter>
             </>
         )
@@ -428,12 +456,10 @@ export function DataSourceLayer() {
 
                 </div>
                 <SheetFooter>
-                    <SheetClose asChild>
-                        <Button variant="destructive">
-                        <X className='mr-2' />
-                        Disconnect
-                        </Button>
-                    </SheetClose>
+                    <Button variant="destructive" onClick={() => handleStatusChange(selectedSource.name, 'Not Connected')}>
+                    <X className='mr-2' />
+                    Disconnect
+                    </Button>
                 </SheetFooter>
             </>
         )
@@ -452,19 +478,8 @@ export function DataSourceLayer() {
                 </SheetDescription>
             </SheetHeader>
             <div className="py-8">
-                <ConnectionForm sourceName={selectedSource.name} />
+                <ConnectionForm sourceName={selectedSource.name} onConnect={() => handleStatusChange(selectedSource.name, 'Connected')} />
             </div>
-            <SheetFooter>
-                <SheetClose asChild>
-                    <Button variant="secondary">
-                      Cancel
-                    </Button>
-                </SheetClose>
-                 <Button>
-                      <Plug className="mr-2 h-4 w-4" />
-                      Connect
-                    </Button>
-            </SheetFooter>
         </>
        )
     }
@@ -507,12 +522,10 @@ export function DataSourceLayer() {
 
             </div>
             <SheetFooter>
-                <SheetClose asChild>
-                    <Button variant="destructive">
-                    <X className='mr-2' />
-                    Disconnect
-                    </Button>
-                </SheetClose>
+                <Button variant="destructive" onClick={() => handleStatusChange(selectedSource.name, 'Not Connected')}>
+                <X className='mr-2' />
+                Disconnect
+                </Button>
             </SheetFooter>
         </>
     )
@@ -528,7 +541,12 @@ export function DataSourceLayer() {
           Manage your integrations with various data services.
         </p>
       </div>
-      <Sheet onOpenChange={(isOpen) => !isOpen && setSelectedSource(null)}>
+      <Sheet open={isSheetOpen} onOpenChange={(isOpen) => {
+          setIsSheetOpen(isOpen);
+          if (!isOpen) {
+            setSelectedSource(null)
+          }
+        }}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {dataSources.map((source) => (
             <Card key={source.name} className="flex flex-col">
