@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -39,6 +40,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Switch } from './ui/switch';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 
 type DataSource = {
@@ -652,25 +654,16 @@ export function DataSourceLayer() {
               <CardContent className="flex-grow">
                 <p className="text-muted-foreground">{source.description}</p>
               </CardContent>
-              <CardFooter className={cn('gap-2', !source.isGoogleService && 'grid-cols-1')}>
+              <CardFooter className="grid-cols-1">
                  <SheetTrigger asChild>
                     <Button
                       className="w-full"
                       onClick={() => handleManageClick(source)}
-                      variant={source.isGoogleService ? 'default' : 'default'}
                     >
                       <Plug className="mr-2 h-4 w-4" />
                       {source.action}
                     </Button>
                   </SheetTrigger>
-                  {source.isGoogleService && source.consoleUrl && (
-                    <Button variant="outline" className="w-full" asChild>
-                      <a href={source.consoleUrl(projectId)} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2" />
-                        Open Console
-                      </a>
-                    </Button>
-                  )}
               </CardFooter>
             </Card>
           ))}
