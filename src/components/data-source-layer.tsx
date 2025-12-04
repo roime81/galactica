@@ -37,7 +37,6 @@ import { useAuth } from '@/firebase';
 import { Separator } from '@/components/ui/separator';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Slider } from './ui/slider';
 import { Switch } from './ui/switch';
 import { useToast } from '@/hooks/use-toast';
 
@@ -50,6 +49,7 @@ type DataSource = {
   statusVariant: 'default' | 'destructive';
   action: 'Manage' | 'Connect';
   consoleUrl?: (projectId?: string) => string;
+  isGoogleService?: boolean;
 };
 
 const initialDataSources: DataSource[] = [
@@ -61,6 +61,7 @@ const initialDataSources: DataSource[] = [
     statusVariant: 'default',
     action: 'Manage',
     consoleUrl: (projectId) => `https://console.firebase.google.com/project/${projectId}/firestore`,
+    isGoogleService: true,
   },
   {
     name: 'Google BigQuery',
@@ -70,6 +71,7 @@ const initialDataSources: DataSource[] = [
     statusVariant: 'default',
     action: 'Manage',
     consoleUrl: (projectId) => `https://console.cloud.google.com/bigquery?project=${projectId}`,
+     isGoogleService: true,
   },
   {
     name: 'Google Cloud Storage',
@@ -79,6 +81,7 @@ const initialDataSources: DataSource[] = [
     statusVariant: 'default',
     action: 'Manage',
     consoleUrl: (projectId) => `https://console.cloud.google.com/storage/browser?project=${projectId}`,
+     isGoogleService: true,
   },
     {
     name: 'Amazon S3',
@@ -154,6 +157,39 @@ const initialDataSources: DataSource[] = [
   },
 ];
 
+const GoogleServiceConnection = ({ sourceName, onConnect }: { sourceName: string, onConnect: () => void }) => {
+  const { toast } = useToast();
+
+  const handleConnect = () => {
+    toast({
+      title: 'Connection Successful',
+      description: `You have successfully connected to ${sourceName}.`,
+    });
+    onConnect();
+  };
+
+  return (
+    <div className='flex flex-col h-full'>
+      <div className='flex-grow p-4 rounded-lg border bg-muted/50 text-center flex flex-col justify-center items-center'>
+        <p className='text-sm text-muted-foreground mb-4'>
+          Click the button below to connect to {sourceName} using your current Google Cloud project context.
+        </p>
+      </div>
+      <SheetFooter className="mt-8">
+        <SheetClose asChild>
+            <Button variant="secondary" type="button">
+              Cancel
+            </Button>
+        </SheetClose>
+        <Button onClick={handleConnect}>
+          <Plug className="mr-2 h-4 w-4" />
+          Connect
+        </Button>
+      </SheetFooter>
+    </div>
+  );
+};
+
 const ConnectionForm = ({ sourceName, onConnect }: { sourceName: string, onConnect: () => void }) => {
   const { toast } = useToast();
   const [formState, setFormState] = useState<Record<string, string>>({});
@@ -199,9 +235,9 @@ const ConnectionForm = ({ sourceName, onConnect }: { sourceName: string, onConne
       break;
     default:
       return (
-        <div className='p-4 rounded-lg border bg-muted/50 text-center'>
-          <p className='text-sm text-muted-foreground'>Connection form not available for this service.</p>
-        </div>
+         <div className='p-4 rounded-lg border bg-muted/50 text-center'>
+           <p className='text-sm text-muted-foreground'>Connection form not available for this service.</p>
+         </div>
       );
   }
   
@@ -512,8 +548,18 @@ export function DataSourceLayer() {
                   Enter the credentials to configure your connection to this service.
                 </SheetDescription>
             </SheetHeader>
-            <div className="py-8">
-                <ConnectionForm sourceName={selectedSource.name} onConnect={() => handleStatusChange(selectedSource.name, 'Connected')} />
+            <div className="py-8 flex-grow">
+               {selectedSource.isGoogleService ? (
+                 <GoogleServiceConnection 
+                    sourceName={selectedSource.name} 
+                    onConnect={() => handleStatusChange(selectedSource.name, 'Connected')} 
+                 />
+                ) : (
+                  <ConnectionForm 
+                    sourceName={selectedSource.name} 
+                    onConnect={() => handleStatusChange(selectedSource.name, 'Connected')} 
+                  />
+                )}
             </div>
         </>
        )
@@ -620,7 +666,7 @@ export function DataSourceLayer() {
             </Card>
           ))}
         </div>
-        <SheetContent className="overflow-y-auto">
+        <SheetContent className="overflow-y-auto flex flex-col">
             {renderSheetContent()}
         </SheetContent>
       </Sheet>
