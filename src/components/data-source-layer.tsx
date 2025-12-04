@@ -59,9 +59,10 @@ const dataSources: DataSource[] = [
     name: 'Google Cloud Storage',
     icon: <Cloud className="h-8 w-8 text-green-500" />,
     description: 'Object storage for companies of all sizes.',
-    status: 'Not Connected',
-    statusVariant: 'destructive',
-    action: 'Connect',
+    status: 'Connected',
+    statusVariant: 'default',
+    action: 'Manage',
+    consoleUrl: (projectId) => `https://console.cloud.google.com/storage/browser?project=${projectId}`,
   },
   {
     name: 'Generic REST API',
