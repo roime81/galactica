@@ -159,29 +159,49 @@ const initialDataSources: DataSource[] = [
   },
 ];
 
-const GoogleServiceConnection = ({ sourceName, onConnect }: { sourceName: string, onConnect: () => void }) => {
+const GoogleServiceConnection = ({
+  source,
+  onConnect,
+}: {
+  source: DataSource;
+  onConnect: () => void;
+}) => {
   const { toast } = useToast();
+  const auth = useAuth();
+  const projectId = auth?.app?.options?.projectId;
 
   const handleConnect = () => {
     toast({
       title: 'Connection Successful',
-      description: `You have successfully connected to ${sourceName}.`,
+      description: `You have successfully connected to ${source.name}.`,
     });
     onConnect();
   };
 
   return (
     <div className='flex flex-col h-full'>
-      <div className='flex-grow p-4 rounded-lg border bg-muted/50 text-center flex flex-col justify-center items-center'>
-        <p className='text-sm text-muted-foreground mb-4'>
-          Click the button below to connect to {sourceName} using your current Google Cloud project context.
+      <div className='flex-grow p-4 rounded-lg border bg-muted/50 text-center flex flex-col justify-center items-center space-y-4'>
+        <p className='text-sm text-muted-foreground'>
+          Click the 'Connect' button below to link {source.name} using your current Google Cloud project context.
         </p>
+        {source.consoleUrl && (
+          <Button variant="outline" className="w-full" asChild>
+            <a
+              href={source.consoleUrl(projectId)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ExternalLink className="mr-2" />
+              Open Console
+            </a>
+          </Button>
+        )}
       </div>
       <SheetFooter className="mt-8">
         <SheetClose asChild>
-            <Button variant="secondary" type="button">
-              Cancel
-            </Button>
+          <Button variant="secondary" type="button">
+            Cancel
+          </Button>
         </SheetClose>
         <Button onClick={handleConnect}>
           <Plug className="mr-2 h-4 w-4" />
@@ -553,7 +573,7 @@ export function DataSourceLayer() {
             <div className="py-8 flex-grow">
                {selectedSource.isGoogleService ? (
                  <GoogleServiceConnection 
-                    sourceName={selectedSource.name} 
+                    source={selectedSource} 
                     onConnect={() => handleStatusChange(selectedSource.name, 'Connected')} 
                  />
                 ) : (
