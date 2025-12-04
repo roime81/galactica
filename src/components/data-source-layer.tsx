@@ -23,10 +23,23 @@ import {
   SheetFooter,
   SheetClose
 } from '@/components/ui/sheet';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose
+} from '@/components/ui/dialog';
 import { useAuth } from '@/firebase';
 import { Separator } from '@/components/ui/separator';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { Slider } from './ui/slider';
+import { Switch } from './ui/switch';
+
 
 type DataSource = {
   name: string;
@@ -203,6 +216,7 @@ const ConnectionForm = ({ sourceName }: { sourceName: string }) => {
 
 export function DataSourceLayer() {
   const [selectedSource, setSelectedSource] = useState<DataSource | null>(null);
+  const [isClusterSettingsOpen, setIsClusterSettingsOpen] = useState(false);
   const auth = useAuth();
   const projectId = auth?.app?.options?.projectId;
 
@@ -317,10 +331,56 @@ export function DataSourceLayer() {
                             <span className='font-semibold text-green-600'>Connected</span>
                         </div>
                     </div>
-                     <Button variant="outline" className="w-full">
-                        <Settings />
-                        Manage Cluster Settings
-                    </Button>
+                    <Dialog open={isClusterSettingsOpen} onOpenChange={setIsClusterSettingsOpen}>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="w-full">
+                            <Settings />
+                            Manage Cluster Settings
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Spark Cluster Configuration</DialogTitle>
+                          <DialogDescription>
+                            Adjust the resources allocated to your Spark cluster. Changes will be applied on the next job run.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-6 py-4">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="dynamic-allocation">Enable Dynamic Allocation</Label>
+                            <Switch id="dynamic-allocation" defaultChecked />
+                          </div>
+                          <Separator />
+                          <div className="grid grid-cols-2 items-center gap-4">
+                            <Label htmlFor="driver-cores">Driver Cores</Label>
+                            <Input id="driver-cores" defaultValue="2" className="col-span-1" />
+                          </div>
+                          <div className="grid grid-cols-2 items-center gap-4">
+                            <Label htmlFor="driver-memory">Driver Memory (GB)</Label>
+                            <Input id="driver-memory" defaultValue="4" className="col-span-1" />
+                          </div>
+                          <Separator />
+                           <div className="grid grid-cols-2 items-center gap-4">
+                            <Label htmlFor="exec-instances">Executor Instances</Label>
+                            <Input id="exec-instances" defaultValue="4" className="col-span-1" />
+                          </div>
+                           <div className="grid grid-cols-2 items-center gap-4">
+                            <Label htmlFor="exec-cores">Executor Cores</Label>
+                            <Input id="exec-cores" defaultValue="4" className="col-span-1" />
+                          </div>
+                          <div className="grid grid-cols-2 items-center gap-4">
+                            <Label htmlFor="exec-memory">Executor Memory (GB)</Label>
+                            <Input id="exec-memory" defaultValue="8" className="col-span-1" />
+                          </div>
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button variant="outline">Cancel</Button>
+                            </DialogClose>
+                            <Button onClick={() => setIsClusterSettingsOpen(false)}>Save Changes</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                 </div>
                 <SheetFooter>
                     <SheetClose asChild>
