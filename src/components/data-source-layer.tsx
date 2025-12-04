@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Server, Plug, Cloud, Link, X, ExternalLink, Key, Upload, Share2, Sparkles, FileUp, Settings, HardDrive } from 'lucide-react';
+import { Server, Plug, Cloud, Link, X, ExternalLink, Key, Upload, Share2, Sparkles, FileUp, Settings, HardDrive, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Sheet,
@@ -66,6 +66,22 @@ const dataSources: DataSource[] = [
     action: 'Manage',
     consoleUrl: (projectId) => `https://console.cloud.google.com/storage/browser?project=${projectId}`,
   },
+    {
+    name: 'Amazon S3',
+    icon: <HardDrive className="h-8 w-8 text-orange-600" />,
+    description: 'Scalable object storage for data backup, archival, and analytics.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
+  },
+  {
+    name: 'Azure Blob Storage',
+    icon: <HardDrive className="h-8 w-8 text-blue-400" />,
+    description: 'Massively scalable object storage for unstructured data.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
+  },
   {
     name: 'Generic REST API',
     icon: <Link className="h-8 w-8 text-gray-400" />,
@@ -97,6 +113,30 @@ const dataSources: DataSource[] = [
     status: 'Connected',
     statusVariant: 'default',
     action: 'Manage',
+  },
+  {
+    name: 'Amazon Redshift',
+    icon: <Server className="h-8 w-8 text-red-600" />,
+    description: 'Cloud data warehouse for large-scale data analytics.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
+  },
+  {
+    name: 'Azure Synapse',
+    icon: <Server className="h-8 w-8 text-sky-500" />,
+    description: 'Limitless analytics service with data integration and warehousing.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
+  },
+  {
+    name: 'Azure Cosmos DB',
+    icon: <Database className="h-8 w-8 text-indigo-500" />,
+    description: 'Globally distributed, multi-model NoSQL database service.',
+    status: 'Not Connected',
+    statusVariant: 'destructive',
+    action: 'Connect',
   },
 ];
 
@@ -276,6 +316,38 @@ export function DataSourceLayer() {
                 </SheetFooter>
             </>
         )
+    }
+
+    if (selectedSource.status === 'Not Connected') {
+       return (
+         <>
+            <SheetHeader>
+                <div className='flex items-center gap-4 mb-2'>
+                     {selectedSource.icon}
+                    <SheetTitle className="text-xl">Connect to {selectedSource.name}</SheetTitle>
+                </div>
+                <SheetDescription>
+                  Configure your connection to this service.
+                </SheetDescription>
+            </SheetHeader>
+            <div className="py-8 space-y-6">
+                <div className='p-4 rounded-lg border bg-muted/50 text-center'>
+                  <p className='text-sm text-muted-foreground'>Connection form will be here.</p>
+                </div>
+            </div>
+            <SheetFooter>
+                <SheetClose asChild>
+                    <Button variant="secondary">
+                      Cancel
+                    </Button>
+                </SheetClose>
+                 <Button>
+                      <Plug className="mr-2 h-4 w-4" />
+                      Connect
+                    </Button>
+            </SheetFooter>
+        </>
+       )
     }
 
     return (
