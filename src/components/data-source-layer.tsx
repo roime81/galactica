@@ -140,6 +140,67 @@ const dataSources: DataSource[] = [
   },
 ];
 
+const ConnectionForm = ({ sourceName }: { sourceName: string }) => {
+  let fields: {id: string, label: string, type: string, placeholder: string}[] = [];
+
+  switch (sourceName) {
+    case 'Amazon S3':
+      fields = [
+        { id: 's3-bucket-name', label: 'Bucket Name', type: 'text', placeholder: 'my-data-bucket' },
+        { id: 's3-access-key', label: 'Access Key ID', type: 'text', placeholder: 'AKIA...' },
+        { id: 's3-secret-key', label: 'Secret Access Key', type: 'password', placeholder: '••••••••••••••••' },
+      ];
+      break;
+    case 'Azure Blob Storage':
+      fields = [
+        { id: 'azure-storage-account', label: 'Storage Account Name', type: 'text', placeholder: 'mystorageaccount' },
+        { id: 'azure-connection-string', label: 'Connection String', type: 'password', placeholder: 'DefaultEndpointsProtocol=https...' },
+      ];
+      break;
+    case 'Amazon Redshift':
+      fields = [
+        { id: 'redshift-host', label: 'Cluster Host', type: 'text', placeholder: 'my-cluster.random-chars.us-east-1.redshift.amazonaws.com' },
+        { id: 'redshift-db', label: 'Database Name', type: 'text', placeholder: 'dev' },
+        { id: 'redshift-user', label: 'Database User', type: 'text', placeholder: 'awsuser' },
+        { id: 'redshift-password', label: 'Password', type: 'password', placeholder: '••••••••••••••••' },
+      ];
+      break;
+    case 'Azure Synapse':
+      fields = [
+        { id: 'synapse-endpoint', label: 'SQL Endpoint', type: 'text', placeholder: 'myworkspace-ondemand.sql.azuresynapse.net' },
+        { id: 'synapse-db', label: 'Database Name', type: 'text', placeholder: 'SQLPOOL1' },
+        { id: 'synapse-user', label: 'Username', type: 'text', placeholder: 'sqladminuser' },
+        { id: 'synapse-password', label: 'Password', type: 'password', placeholder: '••••••••••••••••' },
+      ];
+      break;
+    case 'Azure Cosmos DB':
+       fields = [
+        { id: 'cosmos-endpoint', label: 'Endpoint URI', type: 'text', placeholder: 'https://myaccount.documents.azure.com:443/' },
+        { id: 'cosmos-key', label: 'Primary Key', type: 'password', placeholder: '••••••••••••••••' },
+        { id: 'cosmos-db', label: 'Database Name', type: 'text', placeholder: 'ToDoList' },
+      ];
+      break;
+    default:
+      return (
+        <div className='p-4 rounded-lg border bg-muted/50 text-center'>
+          <p className='text-sm text-muted-foreground'>Connection form not available for this service.</p>
+        </div>
+      );
+  }
+
+  return (
+    <div className='space-y-4'>
+      {fields.map(field => (
+        <div key={field.id} className='space-y-2'>
+          <Label htmlFor={field.id}>{field.label}</Label>
+          <Input id={field.id} type={field.type} placeholder={field.placeholder} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
 export function DataSourceLayer() {
   const [selectedSource, setSelectedSource] = useState<DataSource | null>(null);
   const auth = useAuth();
@@ -327,13 +388,11 @@ export function DataSourceLayer() {
                     <SheetTitle className="text-xl">Connect to {selectedSource.name}</SheetTitle>
                 </div>
                 <SheetDescription>
-                  Configure your connection to this service.
+                  Enter the credentials to configure your connection to this service.
                 </SheetDescription>
             </SheetHeader>
-            <div className="py-8 space-y-6">
-                <div className='p-4 rounded-lg border bg-muted/50 text-center'>
-                  <p className='text-sm text-muted-foreground'>Connection form will be here.</p>
-                </div>
+            <div className="py-8">
+                <ConnectionForm sourceName={selectedSource.name} />
             </div>
             <SheetFooter>
                 <SheetClose asChild>
@@ -448,7 +507,7 @@ export function DataSourceLayer() {
             </Card>
           ))}
         </div>
-        <SheetContent>
+        <SheetContent className="overflow-y-auto">
             {renderSheetContent()}
         </SheetContent>
       </Sheet>
