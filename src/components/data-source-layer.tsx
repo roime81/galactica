@@ -583,7 +583,7 @@ export function DataSourceLayer() {
                     <div className='text-sm space-y-2'>
                         <div className='flex justify-between'>
                             <p className='text-muted-foreground'>Project ID:</p>
-                            <span className='font-mono text-foreground'>{projectId || 'N/A'}</span>
+                            <p className='font-mono text-foreground'>{projectId || 'N/A'}</p>
                         </div>
                          <div className='flex justify-between'>
                             <span className='text-muted-foreground'>Status:</span>
@@ -652,16 +652,25 @@ export function DataSourceLayer() {
               <CardContent className="flex-grow">
                 <p className="text-muted-foreground">{source.description}</p>
               </CardContent>
-              <CardFooter>
+              <CardFooter className={cn('gap-2', !source.isGoogleService && 'grid-cols-1')}>
                  <SheetTrigger asChild>
                     <Button
                       className="w-full"
                       onClick={() => handleManageClick(source)}
+                      variant={source.isGoogleService ? 'default' : 'default'}
                     >
                       <Plug className="mr-2 h-4 w-4" />
                       {source.action}
                     </Button>
                   </SheetTrigger>
+                  {source.isGoogleService && source.consoleUrl && (
+                    <Button variant="outline" className="w-full" asChild>
+                      <a href={source.consoleUrl(projectId)} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="mr-2" />
+                        Open Console
+                      </a>
+                    </Button>
+                  )}
               </CardFooter>
             </Card>
           ))}
