@@ -39,6 +39,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Slider } from './ui/slider';
 import { Switch } from './ui/switch';
+import { useToast } from '@/hooks/use-toast';
 
 
 type DataSource = {
@@ -154,6 +155,9 @@ const initialDataSources: DataSource[] = [
 ];
 
 const ConnectionForm = ({ sourceName, onConnect }: { sourceName: string, onConnect: () => void }) => {
+  const { toast } = useToast();
+  const [formState, setFormState] = useState<Record<string, string>>({});
+
   let fields: {id: string, label: string, type: string, placeholder: string}[] = [];
 
   switch (sourceName) {
@@ -200,20 +204,51 @@ const ConnectionForm = ({ sourceName, onConnect }: { sourceName: string, onConne
         </div>
       );
   }
+  
+  const handleInputChange = (id: string, value: string) => {
+    setFormState(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const isFormValid = fields.every(field => formState[field.id] && formState[field.id].trim() !== '');
+
+    if (!isFormValid) {
+      toast({
+        variant: 'destructive',
+        title: 'Missing Information',
+        description: 'Please fill out all fields to connect to the data source.',
+      });
+      return;
+    }
+
+    toast({
+        title: 'Connection Successful (Simulated)',
+        description: `This is a prototype. A real connection to ${sourceName} has not been established.`,
+    })
+
+    onConnect();
+  };
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); onConnect(); }}>
+    <form onSubmit={handleSubmit}>
       <div className='space-y-4'>
         {fields.map(field => (
           <div key={field.id} className='space-y-2'>
             <Label htmlFor={field.id}>{field.label}</Label>
-            <Input id={field.id} type={field.type} placeholder={field.placeholder} />
+            <Input 
+              id={field.id} 
+              type={field.type} 
+              placeholder={field.placeholder}
+              value={formState[field.id] || ''}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+            />
           </div>
         ))}
       </div>
       <SheetFooter className="mt-8">
           <SheetClose asChild>
-              <Button variant="secondary">
+              <Button variant="secondary" type="button">
                 Cancel
               </Button>
           </SheetClose>
@@ -364,7 +399,7 @@ export function DataSourceLayer() {
                     <Dialog open={isClusterSettingsOpen} onOpenChange={setIsClusterSettingsOpen}>
                       <DialogTrigger asChild>
                         <Button variant="outline" className="w-full">
-                            <Settings />
+                            <Settings className="mr-2" />
                             Manage Cluster Settings
                         </Button>
                       </DialogTrigger>
@@ -450,7 +485,7 @@ export function DataSourceLayer() {
                     </div>
                     
                     <Button variant="outline" className="w-full">
-                        <Key />
+                        <Key className="mr-2" />
                         Manage API Keys
                     </Button>
 
@@ -514,7 +549,7 @@ export function DataSourceLayer() {
                 {selectedSource.consoleUrl && (
                      <Button variant="outline" className="w-full" asChild>
                         <a href={selectedSource.consoleUrl(projectId)} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink />
+                            <ExternalLink className="mr-2" />
                             Open Console
                         </a>
                     </Button>
