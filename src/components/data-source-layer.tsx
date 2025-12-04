@@ -536,7 +536,7 @@ export function DataSourceLayer() {
                      <Separator />
                     <div className='text-sm space-y-2'>
                         <div className='flex justify-between'>
-                            <span className='text-muted-foreground'>Project ID:</span>
+                            <p className='text-muted-foreground'>Project ID:</p>
                             <span className='font-mono text-foreground'>{projectId || 'N/A'}</span>
                         </div>
                          <div className='flex justify-between'>
