@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Server, Plug, Cloud, Link, X, ExternalLink } from 'lucide-react';
+import { Server, Plug, Cloud, Link, X, ExternalLink, Key } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   Sheet,
@@ -25,6 +25,8 @@ import {
 } from '@/components/ui/sheet';
 import { useAuth } from '@/firebase';
 import { Separator } from '@/components/ui/separator';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
 
 type DataSource = {
   name: string;
@@ -68,9 +70,9 @@ const dataSources: DataSource[] = [
     name: 'Generic REST API',
     icon: <Link className="h-8 w-8 text-gray-400" />,
     description: 'Connect to any external data source via a REST API.',
-    status: 'Not Connected',
-    statusVariant: 'destructive',
-    action: 'Connect',
+    status: 'Connected',
+    statusVariant: 'default',
+    action: 'Manage',
   },
 ];
 
@@ -80,9 +82,103 @@ export function DataSourceLayer() {
   const projectId = auth?.app?.options?.projectId;
 
   const handleManageClick = (source: DataSource) => {
-    if (source.action === 'Manage') {
-      setSelectedSource(source);
+    setSelectedSource(source);
+  }
+
+  const renderSheetContent = () => {
+    if (!selectedSource) return null;
+
+    if (selectedSource.name === 'Generic REST API') {
+        return (
+             <>
+                <SheetHeader>
+                    <div className='flex items-center gap-4 mb-2'>
+                         {selectedSource.icon}
+                        <SheetTitle className="text-xl">Manage {selectedSource.name}</SheetTitle>
+                    </div>
+                    <SheetDescription>
+                    View connection details and manage your integration.
+                    </SheetDescription>
+                </SheetHeader>
+                <div className="py-8 space-y-6">
+                    <div className='p-4 rounded-lg border bg-muted/50 space-y-4'>
+                        <h3 className='font-semibold text-lg'>Connection Details</h3>
+                         <Separator />
+                        <div className='space-y-2'>
+                            <Label htmlFor='api-endpoint'>API Endpoint</Label>
+                            <Input id="api-endpoint" readOnly value="https://api.example.com/data" />
+                        </div>
+                        <div className='text-sm flex justify-between'>
+                            <span className='text-muted-foreground'>Status:</span>
+                            <span className='font-semibold text-green-600'>Connected</span>
+                        </div>
+                    </div>
+                    
+                    <Button variant="outline" className="w-full">
+                        <Key />
+                        Manage API Keys
+                    </Button>
+
+                </div>
+                <SheetFooter>
+                    <SheetClose asChild>
+                        <Button variant="destructive">
+                        <X className='mr-2' />
+                        Disconnect
+                        </Button>
+                    </SheetClose>
+                </SheetFooter>
+            </>
+        )
     }
+
+    return (
+        <>
+            <SheetHeader>
+                <div className='flex items-center gap-4 mb-2'>
+                     {selectedSource.icon}
+                    <SheetTitle className="text-xl">Manage {selectedSource.name}</SheetTitle>
+                </div>
+                <SheetDescription>
+                View connection details and manage your integration.
+                </SheetDescription>
+            </SheetHeader>
+            <div className="py-8 space-y-6">
+                <div className='p-4 rounded-lg border bg-muted/50 space-y-4'>
+                    <h3 className='font-semibold text-lg'>Connection Details</h3>
+                     <Separator />
+                    <div className='text-sm space-y-2'>
+                        <div className='flex justify-between'>
+                            <span className='text-muted-foreground'>Project ID:</span>
+                            <span className='font-mono text-foreground'>{projectId || 'N/A'}</span>
+                        </div>
+                         <div className='flex justify-between'>
+                            <span className='text-muted-foreground'>Status:</span>
+                            <span className='font-semibold text-green-600'>Connected</span>
+                        </div>
+                    </div>
+                </div>
+                
+                {selectedSource.consoleUrl && (
+                     <Button variant="outline" className="w-full" asChild>
+                        <a href={selectedSource.consoleUrl(projectId)} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink />
+                            Open Console
+                        </a>
+                    </Button>
+                )}
+
+            </div>
+            <SheetFooter>
+                <SheetClose asChild>
+                    <Button variant="destructive">
+                    <X className='mr-2' />
+                    Disconnect
+                    </Button>
+                </SheetClose>
+            </SheetFooter>
+        </>
+    )
   }
 
   return (
@@ -124,7 +220,6 @@ export function DataSourceLayer() {
                     <Button
                       className="w-full"
                       onClick={() => handleManageClick(source)}
-                      disabled={source.action === 'Connect'}
                     >
                       <Plug className="mr-2 h-4 w-4" />
                       {source.action}
@@ -135,53 +230,7 @@ export function DataSourceLayer() {
           ))}
         </div>
         <SheetContent>
-            {selectedSource && (
-                <>
-                    <SheetHeader>
-                        <div className='flex items-center gap-4 mb-2'>
-                             {selectedSource.icon}
-                            <SheetTitle className="text-xl">Manage {selectedSource.name}</SheetTitle>
-                        </div>
-                        <SheetDescription>
-                        View connection details and manage your integration.
-                        </SheetDescription>
-                    </SheetHeader>
-                    <div className="py-8 space-y-6">
-                        <div className='p-4 rounded-lg border bg-muted/50 space-y-4'>
-                            <h3 className='font-semibold text-lg'>Connection Details</h3>
-                             <Separator />
-                            <div className='text-sm space-y-2'>
-                                <div className='flex justify-between'>
-                                    <span className='text-muted-foreground'>Project ID:</span>
-                                    <span className='font-mono text-foreground'>{projectId || 'N/A'}</span>
-                                </div>
-                                 <div className='flex justify-between'>
-                                    <span className='text-muted-foreground'>Status:</span>
-                                    <span className='font-semibold text-green-600'>Connected</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        {selectedSource.consoleUrl && (
-                             <Button variant="outline" className="w-full" asChild>
-                                <a href={selectedSource.consoleUrl(projectId)} target="_blank" rel="noopener noreferrer">
-                                    <ExternalLink />
-                                    Open Console
-                                </a>
-                            </Button>
-                        )}
-
-                    </div>
-                    <SheetFooter>
-                        <SheetClose asChild>
-                            <Button variant="destructive">
-                            <X className='mr-2' />
-                            Disconnect
-                            </Button>
-                        </SheetClose>
-                    </SheetFooter>
-                </>
-            )}
+            {renderSheetContent()}
         </SheetContent>
       </Sheet>
     </div>
