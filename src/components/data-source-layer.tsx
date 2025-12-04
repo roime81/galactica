@@ -33,6 +33,7 @@ type DataSource = {
   status: 'Connected' | 'Not Connected';
   statusVariant: 'default' | 'destructive';
   action: 'Manage' | 'Connect';
+  consoleUrl?: (projectId?: string) => string;
 };
 
 const dataSources: DataSource[] = [
@@ -43,14 +44,16 @@ const dataSources: DataSource[] = [
     status: 'Connected',
     statusVariant: 'default',
     action: 'Manage',
+    consoleUrl: (projectId) => `https://console.firebase.google.com/project/${projectId}/firestore`,
   },
   {
     name: 'Google BigQuery',
     icon: <Server className="h-8 w-8 text-blue-500" />,
     description: 'Serverless data warehouse for analytics at any scale.',
-    status: 'Not Connected',
-    statusVariant: 'destructive',
-    action: 'Connect',
+    status: 'Connected',
+    statusVariant: 'default',
+    action: 'Manage',
+    consoleUrl: (projectId) => `https://console.cloud.google.com/bigquery?project=${projectId}`,
   },
   {
     name: 'Google Cloud Storage',
@@ -75,6 +78,12 @@ export function DataSourceLayer() {
   const auth = useAuth();
   const projectId = auth?.app?.options?.projectId;
 
+  const handleManageClick = (source: DataSource) => {
+    if (source.action === 'Manage') {
+      setSelectedSource(source);
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -85,7 +94,7 @@ export function DataSourceLayer() {
           Manage your integrations with various data services.
         </p>
       </div>
-      <Sheet>
+      <Sheet onOpenChange={(isOpen) => !isOpen && setSelectedSource(null)}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dataSources.map((source) => (
             <Card key={source.name} className="flex flex-col">
@@ -110,22 +119,16 @@ export function DataSourceLayer() {
                 <p className="text-muted-foreground">{source.description}</p>
               </CardContent>
               <CardFooter>
-                {source.action === 'Manage' ? (
-                  <SheetTrigger asChild>
+                 <SheetTrigger asChild>
                     <Button
                       className="w-full"
-                      onClick={() => setSelectedSource(source)}
+                      onClick={() => handleManageClick(source)}
+                      disabled={source.action === 'Connect'}
                     >
                       <Plug className="mr-2 h-4 w-4" />
                       {source.action}
                     </Button>
                   </SheetTrigger>
-                ) : (
-                  <Button className="w-full" disabled>
-                    <Plug className="mr-2 h-4 w-4" />
-                    {source.action}
-                  </Button>
-                )}
               </CardFooter>
             </Card>
           ))}
@@ -158,12 +161,14 @@ export function DataSourceLayer() {
                             </div>
                         </div>
                         
-                        <Button variant="outline" className="w-full" asChild>
-                            <a href={`https://console.firebase.google.com/project/${projectId}`} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink />
-                                Open Firebase Console
-                            </a>
-                        </Button>
+                        {selectedSource.consoleUrl && (
+                             <Button variant="outline" className="w-full" asChild>
+                                <a href={selectedSource.consoleUrl(projectId)} target="_blank" rel="noopener noreferrer">
+                                    <ExternalLink />
+                                    Open Console
+                                </a>
+                            </Button>
+                        )}
 
                     </div>
                     <SheetFooter>
