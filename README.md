@@ -1,5 +1,4 @@
 
-![Uploading image.png…]()
 
 
 # Galactica
