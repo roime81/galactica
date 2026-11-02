@@ -1,3 +1,6 @@
+![Uploading image.png…]()
+
+
 # Galactica
 
 Galactica is a Next.js prototype for a data lake workbench. Its interface presents a data pipeline organized around the medallion architecture: data sources, Bronze ingestion, Silver transformations, Gold analytics, dashboards, and AI-assisted analysis.
