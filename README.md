@@ -7,6 +7,12 @@ Galactica is a Next.js prototype for a data lake workbench. Its interface presen
 
 > **Prototype status:** This repository is primarily a UI demo. Google sign-in and saving a user profile to Firestore are wired to Firebase. The AI actions call Gemini through Genkit, but use sample data embedded in the server actions. Most data-source connections, ingestion, transformations, tests, datasets, and dashboards are illustrative UI only; they do not connect to external systems or persist pipeline data.
 
+## Screenshots
+
+| Login | Ingestion dashboard |
+| --- | --- |
+| ![Galactica login screen](docs/screenshots/login.png) | ![Galactica ingestion dashboard](docs/screenshots/ingestion.png) |
+
 ## What’s included
 
 - **Pipeline workbench:** Data Source, Ingestion (Bronze), Mapping, Testing, Silver, Gold, Dashboard, and ML & AI views.
